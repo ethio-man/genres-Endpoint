@@ -12,3 +12,5 @@ module.exports = function (req, res, next) {
     res.status(400).send("Invalid token.", ex);
   }
 };
+
+//status(401) means unauthorised
