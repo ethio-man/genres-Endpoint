@@ -1,3 +1,5 @@
+const validateObjectId = require("../middleware/validateObjectId");
+const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 const auth = require("../middleware/auth");
@@ -6,7 +8,6 @@ const { Genres, validator } = require("../model/genre");
 //read all
 
 router.get("/", async (req, res) => {
-  throw new Error("COULDN'T GET GENRES ...");
   const genre = await Genres.find().select({
     name: 1,
     category: 1,
@@ -14,19 +15,21 @@ router.get("/", async (req, res) => {
   res.send(genre);
 });
 //read with id
-router.get("/:id", async (req, res) => {
+router.get("/:id", validateObjectId, async (req, res) => {
   const genre = await Genres.findById(req.params.id);
   if (!genre) return res.status(404).send("⚠️ The film is not found!");
   res.send(genre);
 });
 //create
 router.post("/", auth, async (req, res) => {
-  const { error, value } = validator(req);
+  const { error } = validator(req);
   if (error) return res.status(400).send(error.details[0].message);
+
   let genre = new Genres({
     name: req.body.name,
   });
   genre = await genre.save();
+
   res.send(genre);
 });
 //update

@@ -1,5 +1,5 @@
 const winston = require("winston");
-require("winston-mongodb");
+//require("winston-mongodb");
 const logger = winston.createLogger({
   level: "info",
   format: winston.format.json(),
@@ -7,14 +7,15 @@ const logger = winston.createLogger({
   transports: [
     new winston.transports.File({ filename: "error.log", level: "error" }),
     new winston.transports.File({ filename: "combined.log" }),
-    new winston.transports.MongoDB({
-      db: "mongodb://localhost:27017/genres",
-      collection: "errorlog",
-      level: "error",
-    }),
+    // new winston.transports.MongoDB({
+    //   db: "mongodb://localhost:27017/genres",
+    //   collection: "errorlog",
+    //   level: "error",
+    // }),
   ],
   exceptionHandlers: [
     new winston.transports.File({ filename: "exception.log" }),
+    new winston.transports.Console(),
   ],
 });
 
