@@ -1,13 +1,17 @@
-const winston = require("winston");
-const logger = require("./logger");
+import logger from "./logger.js";
+import express from "express";
 
-const express = require("express");
 const app = express();
 
-require("./startup/routes")(app);
-require("./startup/db")();
-require("./startup/config")();
-require("./startup/validation")();
+import setUpRoutes from "./startup/routes.js";
+import setUpDb from "./startup/db.js";
+import setUpConfig from "./startup/config.js";
+import setUpValidation from "./startup/validation.js";
+
+setUpRoutes(app);
+setUpDb();
+setUpConfig();
+setUpValidation();
 
 process.on("unhandledRejection", (ex) => {
   throw ex;
@@ -17,4 +21,4 @@ const port = process.env.PORT || 3000;
 const server = app.listen(port, () =>
   logger.info(`listening to the port ${port}...`)
 );
-module.exports = server;
+export default server;

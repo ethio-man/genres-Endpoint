@@ -1,5 +1,5 @@
-const Joi = require("joi");
-const mongoose = require("mongoose");
+import Joi from "joi";
+import mongoose from "mongoose";
 
 const customerSchema = mongoose.Schema({
   name: {
@@ -13,16 +13,13 @@ const customerSchema = mongoose.Schema({
   isGold: Boolean,
 });
 
-const Customers = mongoose.model("Customer", customerSchema);
+export const Customers = mongoose.model("Customer", customerSchema);
 
-const validator = function (req) {
+export function validator(req) {
   const schema = Joi.object({
     name: Joi.string().min(3).max(30).required(),
     phone: Joi.string().required(),
     isGold: Joi.boolean(),
   });
   return schema.validate(req.body);
-};
-
-exports.Customers = Customers;
-exports.validator = validator;
+}

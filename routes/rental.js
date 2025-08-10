@@ -1,16 +1,16 @@
-const { Rental, validate } = require("../model/rental");
-const { Customers } = require("../model/customer");
-const { movies } = require("../model/movies");
-const mongoose = require("mongoose");
-const express = require("express");
+import mongoose from "mongoose";
+import express from "express";
+import { Rental, validator } from "../model/rental.js";
+import validate from "../middleware/validate.js";
+import { Customers } from "../model/customer.js";
+import { Movies } from "../model/movies.js";
+
 const router = express.Router();
+
 //read all
 router.get("/", async (req, res) => {
-  const rent = await Rental.find().sort("-dateOut").select({
-    name: 1,
-    category: 1,
-  });
-  res.send(rent);
+  const rent = await Rental.find().sort("dateOut");
+  res.status(200).send(rent);
 });
 //read with id
 router.get("/:id", async (req, res) => {
@@ -19,10 +19,7 @@ router.get("/:id", async (req, res) => {
   res.send(rent);
 });
 //create
-router.post("/", async (req, res) => {
-  const { error, value } = validate(req);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post("/", validate(validator), async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
 
@@ -35,10 +32,10 @@ router.post("/", async (req, res) => {
         .status(400)
         .send("Customer is not found! please register first.");
 
-    const movie = await movies.findById(req.body.movieId).session(session);
+    const movie = await Movies.findById(req.body.movieId).session(session);
     if (!movie) return res.status(400).send("The movie is not found.");
 
-    if (movie.numberInStack === 0)
+    if (movie.numberInStock === 0)
       return res.status(400).send(" Movie not in stack.");
 
     let rent = new Rental({
@@ -56,8 +53,8 @@ router.post("/", async (req, res) => {
     });
     rent = await rent.save({ session });
 
-    movie.numberInStack--;
-    const result = await movie.save({ session });
+    movie.numberInStock--;
+    await movie.save({ session });
 
     await session.commitTransaction();
     session.endSession();
@@ -70,18 +67,15 @@ router.post("/", async (req, res) => {
   }
 });
 //update
-router.put("/:id", async (req, res) => {
-  const { error } = validate(req);
-  if (error) return res.status(400).send(error.details[0].message);
-
-  const customer = Customers.findById(req.body.customerId);
+router.put("/:id", validate(validator), async (req, res) => {
+  const customer = await Customers.findById(req.body.customerId);
   if (!customer)
     return res
       .status(400)
       .send("Customer is not found! please register first.");
-  const movie = movies.findById(req.body.movieId);
+  const movie = await Movies.findById(req.body.movieId);
   if (!movie) return res.status(400).send("The movie is not found.");
-  if (movie.numberInStack === 0)
+  if (movie.numberInStock === 0)
     return res.status(400).send(" Movie not in stack.");
 
   let rent = await Rental.findByIdAndUpdate(
@@ -112,4 +106,4 @@ router.delete("/:id", async (req, res) => {
   res.send(rent);
 });
 
-module.exports = router;
+export default router;

@@ -1,6 +1,9 @@
-const express = require("express");
+import express from "express";
+import { Customers, validator } from "../model/customer.js"; //   ../ means out side this folder(move up once)
+import validate from "../middleware/validate.js";
+
 const router = express.Router();
-const { Customers, validator } = require("../model/customer"); //   ../ means out side this folder(move up once)
+
 //read all
 router.get("/", async (req, res) => {
   const customer = await Customers.find().select({
@@ -16,9 +19,7 @@ router.get("/:id", async (req, res) => {
   res.send(customer);
 });
 //create
-router.post("/", async (req, res) => {
-  const { error, value } = validator(req);
-  if (error) return res.status(400).send(error.details[0].message);
+router.post("/", validate(validator), async (req, res) => {
   let customer = new Customers({
     name: req.body.name,
     phone: req.body.phone,
@@ -28,10 +29,7 @@ router.post("/", async (req, res) => {
   res.send(customer);
 });
 //update
-router.put("/:id", async (req, res) => {
-  const { error } = validator(req);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.put("/:id", validate(validator), async (req, res) => {
   let customer = await Customers.findByIdAndUpdate(
     req.params.id,
     {
@@ -52,4 +50,4 @@ router.delete("/:id", async (req, res) => {
   res.send(customer);
 });
 
-module.exports = router;
+export default router;

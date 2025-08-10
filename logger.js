@@ -1,35 +1,39 @@
-const winston = require("winston");
-//require("winston-mongodb");
+import winston from "winston";
+
 const logger = winston.createLogger({
   level: "info",
-  format: winston.format.json(),
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.json()
+  ),
   defaultMeta: { service: "user-service" },
   transports: [
     new winston.transports.File({ filename: "error.log", level: "error" }),
     new winston.transports.File({ filename: "combined.log" }),
-    // new winston.transports.MongoDB({
-    //   db: "mongodb://localhost:27017/genres",
-    //   collection: "errorlog",
-    //   level: "error",
-    // }),
   ],
   exceptionHandlers: [
     new winston.transports.File({ filename: "exception.log" }),
-    new winston.transports.Console(),
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
+    }),
   ],
 });
 
 if (process.env.NODE_ENV !== "production") {
   logger.add(
     new winston.transports.Console({
-      colorized: true,
-      prettyPrint: true,
-      format: winston.format.simple(),
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple()
+      ),
     })
   );
 }
 
-module.exports = logger;
+export default logger;
 
 //error
 //warns

@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.64% </span>
+                <span class="strong">32.35% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/39</span>
+                <span class='fraction'>11/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>0/10</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.25% </span>
+                <span class="strong">37.93% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/32</span>
+                <span class='fraction'>11/29</span>
             </div>
         
             
@@ -130,17 +130,13 @@
 <a name='L65'></a><a href='#L65'>65</a>
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
-<a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a>
-<a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a>
-<a name='L73'></a><a href='#L73'>73</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L68'></a><a href='#L68'>68</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -148,16 +144,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -174,10 +167,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -200,16 +190,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const express = require("express");
 const router = express.Router();
 const { movies, validator } = require("../model/movies");
+const validate = require("../middleware/validate");
 const { Genres } = require("../model/genre");
 //read all
 router.get("/", <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
@@ -226,10 +217,7 @@ router.get("/:id", <span class="fstat-no" title="function not covered" >as</span
 <span class="cstat-no" title="statement not covered" >  res.send(movie);</span>
 });
 //create
-router.post("/", <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-  const { error, value } = <span class="cstat-no" title="statement not covered" >validator(req);</span>
-<span class="cstat-no" title="statement not covered" >  if (error) <span class="cstat-no" title="statement not covered" >return res.status(400).send(error.details[0].message);</span></span>
-&nbsp;
+router.post("/", validate(validator), <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
   const genre = <span class="cstat-no" title="statement not covered" >await Genres.findById(req.body.genreId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!genre) <span class="cstat-no" title="statement not covered" >res.status(404).send("The genre is not found.");</span></span>
 &nbsp;
@@ -246,10 +234,7 @@ router.post("/", <span class="fstat-no" title="function not covered" >as</span>y
 <span class="cstat-no" title="statement not covered" >  res.send(movie);</span>
 });
 //update
-router.put("/:id", <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
-  const { error } = <span class="cstat-no" title="statement not covered" >validator(req);</span>
-<span class="cstat-no" title="statement not covered" >  if (error) <span class="cstat-no" title="statement not covered" >return res.status(400).send(error.details[0].message);</span></span>
-&nbsp;
+router.put("/:id", validate(validator), <span class="fstat-no" title="function not covered" >as</span>ync (req, res) =&gt; {
   const genre = <span class="cstat-no" title="statement not covered" >Genres.findById(req.body.genreId);</span>
 <span class="cstat-no" title="statement not covered" >  if (!genre) <span class="cstat-no" title="statement not covered" >res.status(404).send("The genre is not found.");</span></span>
 &nbsp;
@@ -286,7 +271,7 @@ module.exports = router;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-29T08:01:58.676Z
+                at 2025-08-09T06:53:12.321Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

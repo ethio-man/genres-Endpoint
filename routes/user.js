@@ -1,18 +1,17 @@
-const auth = require("../middleware/auth");
-const _ = require("lodash");
-const bcrypt = require("bcrypt");
-const { User, validate } = require("../model/user");
-const express = require("express");
+import _ from "lodash";
+import bcrypt from "bcrypt";
+import express from "express";
+import auth from "../middleware/auth.js";
+import { User, validator } from "../model/user.js";
+import validate from "../middleware/validate.js";
+
 const router = express.Router();
 
 router.get("/me", auth, async (req, res) => {
   const user = await User.findById(req.user._id).select("-password");
   res.send(user);
 });
-router.post("/", async (req, res) => {
-  const { error } = validate(req);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post("/", validate(validator), async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("User already registered.");
 
@@ -29,4 +28,4 @@ router.post("/", async (req, res) => {
     .send(_.pick(user, ["_id", "name", "email"]));
 });
 
-module.exports = router;
+export default router;

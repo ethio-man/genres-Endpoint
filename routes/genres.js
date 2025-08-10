@@ -1,18 +1,17 @@
-const validateObjectId = require("../middleware/validateObjectId");
-const mongoose = require("mongoose");
-const express = require("express");
+import express from "express";
+import validateObjectId from "../middleware/validateObjectId.js";
+import validate from "../middleware/validate.js";
+import auth from "../middleware/auth.js";
+import admin from "../middleware/admin.js";
+import { Genres, validator } from "../model/genre.js";
+
 const router = express.Router();
-const auth = require("../middleware/auth");
-const admin = require("../middleware/admin");
-const { Genres, validator } = require("../model/genre");
+
 //read all
 
 router.get("/", async (req, res) => {
-  const genre = await Genres.find().select({
-    name: 1,
-    category: 1,
-  });
-  res.send(genre);
+  const genres = await Genres.find().sort("name");
+  res.send(genres);
 });
 //read with id
 router.get("/:id", validateObjectId, async (req, res) => {
@@ -21,10 +20,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
   res.send(genre);
 });
 //create
-router.post("/", auth, async (req, res) => {
-  const { error } = validator(req);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.post("/", [auth, validate(validator)], async (req, res) => {
   let genre = new Genres({
     name: req.body.name,
   });
@@ -33,10 +29,7 @@ router.post("/", auth, async (req, res) => {
   res.send(genre);
 });
 //update
-router.put("/:id", auth, async (req, res) => {
-  const { error } = validator(req);
-  if (error) return res.status(400).send(error.details[0].message);
-
+router.put("/:id", [auth, validate(validator)], async (req, res) => {
   let genre = await Genres.findByIdAndUpdate(
     req.params.id,
     {
@@ -56,4 +49,4 @@ router.delete("/:id", [auth, admin], async (req, res) => {
   res.send(genre);
 });
 
-module.exports = router;
+export default router;

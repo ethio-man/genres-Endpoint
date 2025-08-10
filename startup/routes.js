@@ -1,12 +1,14 @@
-const express = require("express");
-const movies = require("../routes/movies");
-const customers = require("../routes/customer");
-const genres = require("../routes/genres");
-const rentals = require("../routes/rental");
-const users = require("../routes/user");
-const auth = require("../routes/auth");
-const error = require("../middleware/error");
-module.exports = function (app) {
+import express from "express";
+import movies from "../routes/movies.js";
+import customers from "../routes/customer.js";
+import genres from "../routes/genres.js";
+import rentals from "../routes/rental.js";
+import users from "../routes/user.js";
+import auth from "../routes/auth.js";
+import returns from "../routes/returns.js";
+import error from "../middleware/error.js";
+
+export default function (app) {
   app.use(express.json());
   app.use("/api/genres", genres);
   app.use("/api/movies", movies);
@@ -14,5 +16,6 @@ module.exports = function (app) {
   app.use("/api/rentals", rentals);
   app.use("/api/users", users);
   app.use("/api/auth", auth);
+  app.use("/api/returns", returns);
   app.use(error);
-};
+}
